@@ -156,7 +156,8 @@ void pressureUpdate() {
 
   // if pressure changes, change LED
   if (pressureMapped != pressureState) {
-    // Serial.println("Pressure: " + pressure_PSI); // for serial plotter
+    Serial.print("Pressure: ");
+    Serial.println(pressure_PSI); // for serial plotter
     strip.clear();
     strip.setPixelColor(pressureMapped, purple);
     strip.show();
