@@ -36,22 +36,17 @@ Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800); // Declare Ne
 uint32_t purple = strip.Color(191, 64, 191); // Declare LED color
 
 unsigned long currentMillis;
-
 unsigned long previousMillis = 0;
 
-const unsigned long period_ms = 5000;
+const unsigned long period_ms = 5000; // 5000 ms
+const unsigned long default_delay = 500; // 500 ms
+long stepDelay = period_ms;
 
 int pressureState = 0;
-
 bool autoState = false;
-
 bool promptAsked = false;
-
 bool buttonPressed = false;
-
 int stateCounter = 1;
-
-long stepDelay = period_ms;
 
 void setup() {
   // put your setup code here, to run once:
@@ -99,7 +94,7 @@ void loop() {
   pressureUpdate();
   currentMillis = millis();
 
-  if (digitalRead(SWAuto) && (stateCounter <= 16)) { // automatic code
+  if (digitalRead(SWAuto) && (stateCounter <= 20)) { // automatic code
     if (currentMillis - previousMillis >= stepDelay) {
       if (!promptAsked) {
         Serial.print("Press button to begin state #");
@@ -157,7 +152,7 @@ void pressureUpdate() {
   // if pressure changes, change LED
   if (pressureMapped != pressureState) {
     Serial.print("Pressure: ");
-    Serial.println(pressure_PSI); // for serial plotter
+    Serial.println(pressure_PSI);
     strip.clear();
     strip.setPixelColor(pressureMapped, purple);
     strip.show();
@@ -167,153 +162,206 @@ void pressureUpdate() {
 }
 
 long solenoidActions(int stateNumber) {
+  Serial.println(); // blank line
   Serial.print("Beginning State #");
   Serial.println(stateNumber);
 
   // case switch statements
+  // Implementation:
+  // LOW = solenoid on/vac
+  // HIGH = solenoid off/vent
+  // cases execute in order
+  // number after return statement is delay for that step
   switch (stateNumber) {
     case 1:
-      // do action: turn all on
-      digitalWrite(IN1, LOW);
-      digitalWrite(IN2, LOW);
-      digitalWrite(IN3, LOW);
-      digitalWrite(IN4, LOW);
-      return 1000;
+      // do action: turn all off (vent)
+      digitalWrite(IN1, HIGH); // vent
+      digitalWrite(IN2, HIGH); // vent
+      digitalWrite(IN3, HIGH); // vent
+      digitalWrite(IN4, HIGH); // vent
+      Serial.println("Connect card, start pump, then press enter to start cartridge run.");
+      Serial.println("Place sample and buffer, then press enter.");
+      return default_delay;
     break;
 
     case 2:
-      // do action:
-      digitalWrite(IN1, HIGH);
-      digitalWrite(IN2, LOW);
-      digitalWrite(IN3, LOW);
-      digitalWrite(IN4, LOW);
-      return 2000;
+      // do action: Set S1 and S2 to vac
+      digitalWrite(IN1, LOW); // vac
+      digitalWrite(IN2, LOW); // vac
+      digitalWrite(IN3, HIGH); // vent
+      digitalWrite(IN4, HIGH); // vent
+      Serial.println("Press enter when ready to pull in sample to meter well.");
+      return 10000; // delay 10000 ms
     break;
     
     case 3:
-      // do action:
-      digitalWrite(IN1, LOW);
-      digitalWrite(IN2, HIGH);
-      digitalWrite(IN3, LOW);
-      digitalWrite(IN4, LOW);
-      return 3000;
+      // do action: Set S1 to vent
+      digitalWrite(IN1, HIGH); // vent
+      digitalWrite(IN2, LOW); // vac
+      digitalWrite(IN3, HIGH); // vent
+      digitalWrite(IN4, HIGH); // vent
+      return 5000; // delay 5000 ms
     break;
 
     case 4:
-      // do action:
-      digitalWrite(IN1, HIGH);
-      digitalWrite(IN2, HIGH);
-      digitalWrite(IN3, LOW);
-      digitalWrite(IN4, LOW);
-      return 4000;
+      // do action: Set S3 to vac
+      digitalWrite(IN1, HIGH); // vent
+      digitalWrite(IN2, LOW); // vac
+      digitalWrite(IN3, LOW); // vac
+      digitalWrite(IN4, HIGH); // vent
+      Serial.println("Press enter to fill buffer.");
+      return default_delay;
     break;
 
     case 5:
-      // do action:
-      digitalWrite(IN1, LOW);
-      digitalWrite(IN2, LOW);
-      digitalWrite(IN3, HIGH);
-      digitalWrite(IN4, LOW);
-      return 5000;
+      // do action: Set S2 to vent
+      digitalWrite(IN1, HIGH); // vent
+      digitalWrite(IN2, HIGH); // vent
+      digitalWrite(IN3, LOW); // vac
+      digitalWrite(IN4, HIGH); // vent
+      Serial.println("Press enter to fill to mix well.");
+      return default_delay;
     break;
 
     case 6:
-      // do action:
-      digitalWrite(IN1, HIGH);
-      digitalWrite(IN2, LOW);
-      digitalWrite(IN3, HIGH);
-      digitalWrite(IN4, LOW);
-      return 6000;
+      // do action: Set S2 to vac
+      digitalWrite(IN1, HIGH); // vent
+      digitalWrite(IN2, LOW); // vac
+      digitalWrite(IN3, LOW); // vac
+      digitalWrite(IN4, HIGH); // vent
+      return 2000; // delay 2000 ms
     break;
 
     case 7:
-      // do action:
-      digitalWrite(IN1, LOW);
-      digitalWrite(IN2, HIGH);
-      digitalWrite(IN3, HIGH);
-      digitalWrite(IN4, LOW);
-      return 7000;
+      // do action: Set S4 to vac
+      digitalWrite(IN1, HIGH); // vent
+      digitalWrite(IN2, LOW); // vac
+      digitalWrite(IN3, LOW); // vac
+      digitalWrite(IN4, LOW); // vac
+      return default_delay;
     break;
 
     case 8:
-      // do action:
-      digitalWrite(IN1, HIGH);
-      digitalWrite(IN2, HIGH);
-      digitalWrite(IN3, HIGH);
-      digitalWrite(IN4, LOW);
-      return 8000;
+      // do action: Set S3 to vent
+      digitalWrite(IN1, HIGH); // vent
+      digitalWrite(IN2, LOW); // vac
+      digitalWrite(IN3, HIGH); // vent
+      digitalWrite(IN4, LOW); // vac
+      Serial.println("Press enter when mixed.");
+      return default_delay;
     break;
 
     case 9:
-      // do action:
-      digitalWrite(IN1, LOW);
-      digitalWrite(IN2, LOW);
-      digitalWrite(IN3, LOW);
-      digitalWrite(IN4, HIGH);
-      return 9000;
+      // do action: Set S2 to vent
+      digitalWrite(IN1, HIGH); // vent
+      digitalWrite(IN2, HIGH); // vent
+      digitalWrite(IN3, HIGH); // vent
+      digitalWrite(IN4, LOW); // vac
+      return default_delay;
     break;
 
     case 10:
-      // do action:
-      digitalWrite(IN1, HIGH);
-      digitalWrite(IN2, LOW);
-      digitalWrite(IN3, LOW);
-      digitalWrite(IN4, HIGH);
-      return 10000;
+      // do action: Set S4 to vent
+      digitalWrite(IN1, HIGH); // vent
+      digitalWrite(IN2, HIGH); // vent
+      digitalWrite(IN3, HIGH); // vent
+      digitalWrite(IN4, HIGH); // vent
+      Serial.println("Move pneumatic lines 1 and 2 to position 5 and 6 respectively.");
+      Serial.println("Close stage vent and then press enter to fill stage well.");
+      return default_delay;
     break;
 
     case 11:
-      // do action:
-      digitalWrite(IN1, LOW);
-      digitalWrite(IN2, HIGH);
-      digitalWrite(IN3, LOW);
-      digitalWrite(IN4, HIGH);
-      return 11000;
+      // do action: Set S1 to vac
+      digitalWrite(IN1, LOW); // vac
+      digitalWrite(IN2, HIGH); // vent
+      digitalWrite(IN3, HIGH); // vent
+      digitalWrite(IN4, HIGH); // vent
+      Serial.println("Open stage vent and then press enter.");
+      return default_delay;
     break;
 
     case 12:
-      // do action:
-      digitalWrite(IN1, HIGH);
-      digitalWrite(IN2, HIGH);
-      digitalWrite(IN3, LOW);
-      digitalWrite(IN4, HIGH);
-      return 12000;
+      // do action: Set S4 to vac
+      digitalWrite(IN1, LOW); // vac
+      digitalWrite(IN2, HIGH); // vent
+      digitalWrite(IN3, HIGH); // vent
+      digitalWrite(IN4, LOW); // vac
+      Serial.println("Clear Lines then press enter to fill detection.");
+      return 10000;
     break;
 
     case 13:
-      // do action:
-      digitalWrite(IN1, LOW);
-      digitalWrite(IN2, LOW);
-      digitalWrite(IN3, HIGH);
-      digitalWrite(IN4, HIGH);
+      // do action: Set S4 to vent
+      digitalWrite(IN1, LOW); // vac
+      digitalWrite(IN2, HIGH); // vent
+      digitalWrite(IN3, HIGH); // vent
+      digitalWrite(IN4, HIGH); // vent
       return 13000;
     break;
 
     case 14:
-      // do action:
-      digitalWrite(IN1, HIGH);
-      digitalWrite(IN2, LOW);
-      digitalWrite(IN3, HIGH);
-      digitalWrite(IN4, HIGH);
-      return 14000;
+      // do action: Set S2 to vac
+      digitalWrite(IN1, LOW); // vac
+      digitalWrite(IN2, LOW); // vac
+      digitalWrite(IN3, HIGH); // vent
+      digitalWrite(IN4, HIGH); // vent
+      return 1000;
     break;
 
     case 15:
-      // do action:
-      digitalWrite(IN1, LOW);
-      digitalWrite(IN2, HIGH);
-      digitalWrite(IN3, HIGH);
-      digitalWrite(IN4, HIGH);
-      return 15000;
+      // do action: Set S1 to vent
+      digitalWrite(IN1, HIGH); // vent
+      digitalWrite(IN2, LOW); // vac
+      digitalWrite(IN3, HIGH); // vent
+      digitalWrite(IN4, HIGH); // vent
+      return 10000;
     break;
 
     case 16:
-      // do action: turn all off
-      digitalWrite(IN1, HIGH);
-      digitalWrite(IN2, HIGH);
-      digitalWrite(IN3, HIGH);
-      digitalWrite(IN4, HIGH);
-      return 16000;
+      // do action: set S1 to vac
+      digitalWrite(IN1, LOW); // vac
+      digitalWrite(IN2, LOW); // vac
+      digitalWrite(IN3, HIGH); // vent
+      digitalWrite(IN4, HIGH); // vent
+      return 100;
+    break;
+
+    case 17:
+      // do action: set S2 to vent
+      digitalWrite(IN1, LOW); // vac
+      digitalWrite(IN2, HIGH); // vent
+      digitalWrite(IN3, HIGH); // vent
+      digitalWrite(IN4, HIGH); // vent
+      return 10000;
+    break;
+
+    case 18:
+      // do action: set S2 to vac
+      digitalWrite(IN1, LOW); // vac
+      digitalWrite(IN2, LOW); // vac
+      digitalWrite(IN3, HIGH); // vent
+      digitalWrite(IN4, HIGH); // vent
+      return 100;
+    break;
+
+    case 19:
+      // do action: set S1 to vent
+      digitalWrite(IN1, LOW); // vent
+      digitalWrite(IN2, LOW); // vac
+      digitalWrite(IN3, HIGH); // vent
+      digitalWrite(IN4, HIGH); // vent
+      Serial.println("Press Enter to end script.");
+      return default_delay;
+    break;
+
+    case 20:
+      // do action: set all to vent
+      digitalWrite(IN1, HIGH); // vent
+      digitalWrite(IN2, HIGH); // vent
+      digitalWrite(IN3, HIGH); // vent
+      digitalWrite(IN4, HIGH); // vent
+      return 100;
     break;
 
     default:
