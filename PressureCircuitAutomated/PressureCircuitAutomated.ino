@@ -24,12 +24,26 @@ Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800); // Declare Ne
 #define IN6 48
 #define IN7 50
 #define IN8 52
+#define IN1_2 22
+#define IN2_2 24
+#define IN3_2 26
+#define IN4_2 28
+#define IN5_2 30
+#define IN6_2 32
+#define IN7_2 34
+#define IN8_2 36
 
 // Switch connection pins
 #define SW1 43
 #define SW2 41
 #define SW3 39
 #define SW4 37
+#define SW5 33
+#define SW6 31
+#define SW7 29
+#define SW8 27
+#define SW9 25
+#define SW10 23
 #define SWAuto 35
 #define buttonNext 53
 
@@ -70,12 +84,26 @@ void setup() {
   pinMode(IN6, OUTPUT);
   pinMode(IN7, OUTPUT);
   pinMode(IN8, OUTPUT);
+  pinMode(IN1_2, OUTPUT);
+  pinMode(IN2_2, OUTPUT);
+  pinMode(IN3_2, OUTPUT);
+  pinMode(IN4_2, OUTPUT);
+  pinMode(IN5_2, OUTPUT);
+  pinMode(IN6_2, OUTPUT);
+  pinMode(IN7_2, OUTPUT);
+  pinMode(IN8_2, OUTPUT);
 
   // initialize Switch pins
   pinMode(SW1, INPUT);
   pinMode(SW2, INPUT);
   pinMode(SW3, INPUT);
   pinMode(SW4, INPUT);
+  pinMode(SW5, INPUT);
+  pinMode(SW6, INPUT);
+  pinMode(SW7, INPUT);
+  pinMode(SW8, INPUT);
+  pinMode(SW9, INPUT);
+  pinMode(SW10, INPUT);
   pinMode(SWAuto, INPUT);
   pinMode(buttonNext, INPUT);
 
@@ -88,6 +116,14 @@ void setup() {
   digitalWrite(IN6, HIGH);
   digitalWrite(IN7, HIGH);
   digitalWrite(IN8, HIGH);
+  digitalWrite(IN1_2, HIGH);
+  digitalWrite(IN2_2, HIGH);
+  digitalWrite(IN3_2, HIGH);
+  digitalWrite(IN4_2, HIGH);
+  digitalWrite(IN5_2, HIGH);
+  digitalWrite(IN6_2, HIGH);
+  digitalWrite(IN7_2, HIGH);
+  digitalWrite(IN8_2, HIGH);
 }
 
 void loop() {
@@ -402,5 +438,47 @@ void solenoidManual() {
     // Serial.println("Solenoid 4 on");
   } else {
     digitalWrite(IN4, LOW);
+  }
+
+  if (digitalRead(SW5)) {
+    digitalWrite(IN6_2, HIGH);
+    // Serial.println("Solenoid 5 on");
+  } else {
+    digitalWrite(IN6_2, LOW);
+  }
+
+  if (digitalRead(SW6)) {
+    digitalWrite(IN5_2, HIGH);
+    // Serial.println("Solenoid 6 on");
+  } else {
+    digitalWrite(IN5_2, LOW);
+  }
+
+  if (digitalRead(SW7)) {
+    digitalWrite(IN4_2, HIGH);
+    // Serial.println("Solenoid 7 on");
+  } else {
+    digitalWrite(IN4_2, LOW);
+  }
+
+  if (digitalRead(SW8)) {
+    digitalWrite(IN3_2, HIGH);
+    // Serial.println("Solenoid 8 on");
+  } else {
+    digitalWrite(IN3_2, LOW);
+  }
+
+  if (digitalRead(SW9)) {
+    digitalWrite(IN2_2, HIGH);
+    // Serial.println("Solenoid 9 on");
+  } else {
+    digitalWrite(IN2_2, LOW);
+  }
+
+  if (digitalRead(SW10)) {
+    digitalWrite(IN1_2, HIGH);
+    // Serial.println("Solenoid 10 on");
+  } else {
+    digitalWrite(IN1_2, LOW);
   }
 }
