@@ -412,33 +412,73 @@ long solenoidActions(int stateNumber) {
 }
 
 void solenoidManual() {
-  switchStatus = digitalRead(SW1);
-  digitalWrite(IN1, switchStatus);
+  if (digitalRead(SW1)) {
+    digitalWrite(IN1, HIGH);
+  } else {
+    digitalWrite(IN1, LOW);
+    // Serial.println("Solenoid 1 on");
+  }
 
-  switchStatus = digitalRead(SW2);
-  digitalWrite(IN2, switchStatus);
+  if (digitalRead(SW2)) {
+    digitalWrite(IN2, HIGH);
+    // Serial.println("Solenoid 2 on");
+  } else {
+    digitalWrite(IN2, LOW);
+  }
 
-  switchStatus = digitalRead(SW3);
-  digitalWrite(IN3, switchStatus);
+  if (digitalRead(SW3)) {
+    digitalWrite(IN3, HIGH);
+    // Serial.println("Solenoid 3 on");
+  } else {
+    digitalWrite(IN3, LOW);
+  }
 
-  switchStatus = digitalRead(SW4);
-  digitalWrite(IN4, switchStatus);
+  if (digitalRead(SW4)) {
+    digitalWrite(IN4, HIGH);
+    // Serial.println("Solenoid 4 on");
+  } else {
+    digitalWrite(IN4, LOW);
+  }
 
-  switchStatus = digitalRead(SW5);
-  digitalWrite(IN6_2, switchStatus);
+  if (digitalRead(SW5)) {
+    digitalWrite(IN6_2, HIGH);
+    // Serial.println("Solenoid 5 on");
+  } else {
+    digitalWrite(IN6_2, LOW);
+  }
 
- switchStatus = digitalRead(SW6);
-  digitalWrite(IN5_2, switchStatus);
+  if (digitalRead(SW6)) {
+    digitalWrite(IN5_2, HIGH);
+    // Serial.println("Solenoid 6 on");
+  } else {
+    digitalWrite(IN5_2, LOW);
+  }
 
- switchStatus = digitalRead(SW7);
-  digitalWrite(IN4_2, switchStatus);
+  if (digitalRead(SW7)) {
+    digitalWrite(IN4_2, HIGH);
+    // Serial.println("Solenoid 7 on");
+  } else {
+    digitalWrite(IN4_2, LOW);
+  }
 
-  switchStatus = digitalRead(SW8);
-  digitalWrite(IN3_2, switchStatus);
+  if (digitalRead(SW8)) {
+    digitalWrite(IN3_2, HIGH);
+    // Serial.println("Solenoid 8 on");
+  } else {
+    digitalWrite(IN3_2, LOW);
+  }
 
-  switchStatus = digitalRead(SW9);
-  digitalWrite(IN2_2, switchStatus);
+  if (digitalRead(SW9)) {
+    digitalWrite(IN2_2, HIGH);
+    // Serial.println("Solenoid 9 on");
+  } else {
+    digitalWrite(IN2_2, LOW);
+  }
 
-  switchStatus = digitalRead(SW10);
-  digitalWrite(IN1_2, switchStatus);
+  if (digitalRead(SW10)) {
+    digitalWrite(IN1_2, HIGH);
+    // Serial.println("Solenoid 10 on");
+  } else {
+    digitalWrite(IN1_2, LOW);
+  }
 }
