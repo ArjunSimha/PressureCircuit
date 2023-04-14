@@ -69,7 +69,7 @@ double pressure7;
 // state machine variables
 unsigned long currentMillis;
 unsigned long previousMillis = 0;
-#define numStates 13
+#define numStates 16 // = number of states + 1
 bool autoNext = false; // auto advance to next step
 
 const unsigned long default_delay = 10;
@@ -95,7 +95,8 @@ void setup() {
 
   // I2C and Serial setup
   Wire.begin(); // I2C
-  Serial.begin(115200);
+  Serial.begin(9600);
+  Serial1.begin(9600);
 
   // scan for I2C devices
   I2Cscan();
@@ -180,11 +181,11 @@ void loop() {
 
   // pump control
   // pumpBangBang (6, 8);
-  // analogWrite(pumpPin, 255); // always on
-  analogWrite(pumpPin, 0); // always off
+  analogWrite(pumpPin, 255); // always on
+  // analogWrite(pumpPin, 0); // always off
 
   // pressure read
-  // pressureRead();
+  pressureRead();
 }
 
 // to scan for I2C devices connected to the multiplexer
@@ -340,7 +341,6 @@ long solenoidActions(int stateNumber) {
       return default_delay;
     break;
 
-    // TODO
     case 4:
       // do action: Set 8 off, delay 500
       digitalWrite(Solenoid1, LOW); // vac -> 1
@@ -424,7 +424,7 @@ long solenoidActions(int stateNumber) {
     break;
 
     case 9:
-      // do action: Set 5 off and 9 off, message
+      // do action: Set 5 off, message
       digitalWrite(Solenoid1, LOW); // vac -> 1
       digitalWrite(Solenoid2, LOW); // vac -> 2
       digitalWrite(Solenoid3, HIGH); // vent -> 3
@@ -433,7 +433,7 @@ long solenoidActions(int stateNumber) {
       digitalWrite(Solenoid6, LOW); // vac -> 6
       digitalWrite(Solenoid7, HIGH); // vent -> 7
       digitalWrite(Solenoid8, HIGH); // vent -> 8
-      digitalWrite(Solenoid9, HIGH); // vent -> 9
+      digitalWrite(Solenoid9, LOW); // vac -> 9
       digitalWrite(Solenoid10, HIGH); // vent -> 10
       Serial.println("Confirm well 6 filled completely, press button to continue.");
       autoNext = false;
@@ -441,11 +441,44 @@ long solenoidActions(int stateNumber) {
     break;
 
     case 10:
+      // do action: Set 4 on, delay 10000
+      digitalWrite(Solenoid1, LOW); // vac -> 1
+      digitalWrite(Solenoid2, LOW); // vac -> 2
+      digitalWrite(Solenoid3, HIGH); // vent -> 3
+      digitalWrite(Solenoid4, LOW); // vac -> 4
+      digitalWrite(Solenoid5, HIGH); // vent -> 5
+      digitalWrite(Solenoid6, LOW); // vac -> 6
+      digitalWrite(Solenoid7, HIGH); // vent -> 7
+      digitalWrite(Solenoid8, HIGH); // vent -> 8
+      digitalWrite(Solenoid9, LOW); // vac -> 9
+      digitalWrite(Solenoid10, HIGH); // vent -> 10
+      autoNext = true;
+      return 10000;
+    break;
+
+    case 11:
+      // do action: Set 9 off, message
+      digitalWrite(Solenoid1, LOW); // vac -> 1
+      digitalWrite(Solenoid2, LOW); // vac -> 2
+      digitalWrite(Solenoid3, HIGH); // vent -> 3
+      digitalWrite(Solenoid4, LOW); // vac -> 4
+      digitalWrite(Solenoid5, HIGH); // vent -> 5
+      digitalWrite(Solenoid6, LOW); // vac -> 6
+      digitalWrite(Solenoid7, HIGH); // vent -> 7
+      digitalWrite(Solenoid8, HIGH); // vent -> 8
+      digitalWrite(Solenoid9, HIGH); // vent -> 9
+      digitalWrite(Solenoid10, HIGH); // vent -> 10
+      Serial.println("Confirm clear of buffer, press button to continue.");
+      autoNext = false;
+      return default_delay;
+    break;
+
+    case 12:
       // do action: Set 7 on, message
       digitalWrite(Solenoid1, LOW); // vac -> 1
       digitalWrite(Solenoid2, LOW); // vac -> 2
       digitalWrite(Solenoid3, HIGH); // vent -> 3
-      digitalWrite(Solenoid4, HIGH); // vent -> 4
+      digitalWrite(Solenoid4, LOW); // vac -> 4
       digitalWrite(Solenoid5, HIGH); // vent -> 5
       digitalWrite(Solenoid6, LOW); // vac -> 6
       digitalWrite(Solenoid7, LOW); // vac -> 7
@@ -457,12 +490,12 @@ long solenoidActions(int stateNumber) {
       return default_delay;
     break;
 
-    case 11:
+    case 13:
       // do action: Set 10 on, delay 500
       digitalWrite(Solenoid1, LOW); // vac -> 1
       digitalWrite(Solenoid2, LOW); // vac -> 2
       digitalWrite(Solenoid3, HIGH); // vent -> 3
-      digitalWrite(Solenoid4, HIGH); // vent -> 4
+      digitalWrite(Solenoid4, LOW); // vac -> 4
       digitalWrite(Solenoid5, HIGH); // vent -> 5
       digitalWrite(Solenoid6, LOW); // vac -> 6
       digitalWrite(Solenoid7, LOW); // vac -> 7
@@ -473,12 +506,12 @@ long solenoidActions(int stateNumber) {
       return 500;
     break;
 
-    case 12:
+    case 14:
       // do action: Set 3 on and 5 on, message
       digitalWrite(Solenoid1, LOW); // vac -> 1
       digitalWrite(Solenoid2, LOW); // vac -> 2
       digitalWrite(Solenoid3, LOW); // vac -> 3
-      digitalWrite(Solenoid4, HIGH); // vent -> 4
+      digitalWrite(Solenoid4, LOW); // vac -> 4
       digitalWrite(Solenoid5, LOW); // vac -> 5
       digitalWrite(Solenoid6, LOW); // vac -> 6
       digitalWrite(Solenoid7, LOW); // vac -> 7
@@ -490,15 +523,15 @@ long solenoidActions(int stateNumber) {
       return default_delay;
     break;
 
-    case 13:
-      // do action: Set all off, message
+    case 15:
+      // do action: Set all except 7 off, message
       digitalWrite(Solenoid1, HIGH); // vent -> 1
       digitalWrite(Solenoid2, HIGH); // vent -> 2
       digitalWrite(Solenoid3, HIGH); // vent -> 3
       digitalWrite(Solenoid4, HIGH); // vent -> 4
       digitalWrite(Solenoid5, HIGH); // vent -> 5
       digitalWrite(Solenoid6, HIGH); // vent -> 6
-      digitalWrite(Solenoid7, HIGH); // vent -> 7
+      digitalWrite(Solenoid7, LOW); // vac -> 7
       digitalWrite(Solenoid8, HIGH); // vent -> 8
       digitalWrite(Solenoid9, HIGH); // vent -> 9
       digitalWrite(Solenoid10, HIGH); // vent -> 10
@@ -648,21 +681,21 @@ void pressureRead() {
   pressure7 = mpr7.readPressure() / 68.947572932; // read pressure, convert to PSI
   
   // print pressures to serial monitor/plotter
-  Serial.print(pressure0);
-  Serial.print(",");
-  Serial.print(pressure1);
-  Serial.print(",");
-  Serial.print(pressure2);
-  Serial.print(",");
-  Serial.print(pressure3);
-  Serial.print(",");
-  Serial.print(pressure4);
-  Serial.print(",");
-  Serial.print(pressure5);
-  Serial.print(",");
-  Serial.print(pressure6);
-  Serial.print(",");
-  Serial.println(pressure7);
+  Serial1.print(pressure0);
+  Serial1.print(",");
+  Serial1.print(pressure1);
+  Serial1.print(",");
+  Serial1.print(pressure2);
+  Serial1.print(",");
+  Serial1.print(pressure3);
+  Serial1.print(",");
+  Serial1.print(pressure4);
+  Serial1.print(",");
+  Serial1.print(pressure5);
+  Serial1.print(",");
+  Serial1.print(pressure6);
+  Serial1.print(",");
+  Serial1.println(pressure7);
 }
 
 // user input FSM
