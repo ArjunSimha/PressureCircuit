@@ -40,6 +40,7 @@ void tcaselect(uint8_t i) {
 #define SW10 23
 #define SWAuto 35 // to switch between manual and automated code
 #define buttonNext 53 // to advance to next step
+#define readyLED 7
 
 // pump PID pin
 #define pumpPin 10
@@ -122,6 +123,10 @@ void setup() {
   digitalWrite(34, OUTPUT); // unused relay
   digitalWrite(36, OUTPUT); // unused relay
 
+  // initialize ready LED
+  pinMode(readyLED, OUTPUT);
+  digitalWrite(readyLED, LOW);
+
   // initialize Switch pins
   pinMode(SW1, INPUT);
   pinMode(SW2, INPUT);
@@ -166,6 +171,7 @@ void loop() {
         Serial.print("Press button to begin state #");
         Serial.println(stateCounter);
         promptAsked = true;
+        digitalWrite(readyLED, HIGH); // turn ready LED on
       }
       if (state || autoNext) {
         period_ms = solenoidActions(stateCounter);
@@ -173,6 +179,8 @@ void loop() {
         promptAsked = false;
         previousMillis = currentMillis; // reset millis counter
       }
+    } else {
+      digitalWrite(readyLED, LOW); // turn ready LED off
     }
   } else { // manual code
     solenoidManual(); // update solenoids according to switches
