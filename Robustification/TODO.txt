@@ -1,4 +1,0 @@
-- Move pressure sensors to after solenoids
-- Remove "dead step" at beginning and end
-- Change delays/update script
-- Add "ready" LED for when ready to move to next step
