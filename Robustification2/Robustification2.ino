@@ -75,9 +75,10 @@ unsigned long previousMillis = 0;
 #define numStates 16 // = number of states + 1
 bool autoNext = false; // auto advance to next step
 
-const unsigned long default_delay = 10;
+const unsigned long default_delay = 500; // 0.5s min delay
 unsigned long period_ms = default_delay;
 
+// main loop state machine variables
 int pressureState = 0;
 bool autoState = false;
 bool promptAsked = false;
@@ -308,7 +309,7 @@ long solenoidActions(int stateNumber) {
   // digitalWrite(Solenoid10, HIGH/LOW); // vent/vac -> 10
   switch (stateNumber) {
     case 1:
-      // do action: turn all off, message
+      // do action: turn all off, message, delay 0.5s
       digitalWrite(Solenoid1, HIGH); // vent -> 1
       digitalWrite(Solenoid2, HIGH); // vent -> 2
       digitalWrite(Solenoid3, HIGH); // vent -> 3
@@ -341,7 +342,7 @@ long solenoidActions(int stateNumber) {
     break;
     
     case 3:
-      // do action: 1 on, pressure check
+      // do action: 1 on, pressure check, delay 2s
       digitalWrite(Solenoid1, LOW); // vac -> 1
       digitalWrite(Solenoid2, HIGH); // vent -> 2
       digitalWrite(Solenoid3, HIGH); // vent -> 3
@@ -370,7 +371,7 @@ long solenoidActions(int stateNumber) {
       digitalWrite(Solenoid9, HIGH); // vent -> 9
       digitalWrite(Solenoid10, HIGH); // vent -> 10
       autoNext = true;
-      return 500;
+      return default_delay;
     break;
 
     case 5:
@@ -391,7 +392,7 @@ long solenoidActions(int stateNumber) {
     break;
 
     case 6:
-      // do action: Set 3 and 5 on, pressure check
+      // do action: Set 3 and 5 on, pressure check, delay 2s
       digitalWrite(Solenoid1, LOW); // vac -> 1
       digitalWrite(Solenoid2, LOW); // vac -> 2
       digitalWrite(Solenoid3, LOW); // vac -> 3
@@ -408,7 +409,7 @@ long solenoidActions(int stateNumber) {
     break;
 
     case 7:
-      // do action: Set 1 and 3 off, 9 on, delay 0.25s
+      // do action: Set 1 and 3 off, 9 on, delay 0.5s
       digitalWrite(Solenoid1, HIGH); // vent -> 1
       digitalWrite(Solenoid2, LOW); // vac -> 2
       digitalWrite(Solenoid3, HIGH); // vent -> 3
@@ -420,11 +421,11 @@ long solenoidActions(int stateNumber) {
       digitalWrite(Solenoid9, LOW); // vac -> 9
       digitalWrite(Solenoid10, HIGH); // vent -> 10
       autoNext = true;
-      return 250;
+      return default_delay;
     break;
 
     case 8:
-      // do action: Set 6 on, delay 0.25s
+      // do action: Set 6 on, delay 0.5s
       digitalWrite(Solenoid1, HIGH); // vent -> 1
       digitalWrite(Solenoid2, LOW); // vac -> 2
       digitalWrite(Solenoid3, HIGH); // vent -> 3
@@ -436,11 +437,11 @@ long solenoidActions(int stateNumber) {
       digitalWrite(Solenoid9, LOW); // vac -> 9
       digitalWrite(Solenoid10, HIGH); // vent -> 10
       autoNext = true;
-      return 250;
+      return default_delay;
     break;
 
     case 9:
-      // do action: Set 5 off, pressure check
+      // do action: Set 5 off, pressure check, delay 2s
       digitalWrite(Solenoid1, HIGH); // vent -> 1
       digitalWrite(Solenoid2, LOW); // vac -> 2
       digitalWrite(Solenoid3, HIGH); // vent -> 3
@@ -474,7 +475,7 @@ long solenoidActions(int stateNumber) {
     break;
 
     case 11:
-      // do action: Set 9 off, delay 0.25s
+      // do action: Set 9 off, delay 0.5s
       digitalWrite(Solenoid1, HIGH); // vent -> 1
       digitalWrite(Solenoid2, LOW); // vac -> 2
       digitalWrite(Solenoid3, HIGH); // vent -> 3
@@ -486,11 +487,11 @@ long solenoidActions(int stateNumber) {
       digitalWrite(Solenoid9, HIGH); // vent -> 9
       digitalWrite(Solenoid10, HIGH); // vent -> 10
       autoNext = true;
-      return 250;
+      return default_delay;
     break;
 
     case 12:
-      // do action: Set 7 on, pressure check
+      // do action: Set 7 on, pressure check, delay 2s
       digitalWrite(Solenoid1, HIGH); // vent -> 1
       digitalWrite(Solenoid2, LOW); // vac -> 2
       digitalWrite(Solenoid3, HIGH); // vent -> 3
@@ -519,7 +520,7 @@ long solenoidActions(int stateNumber) {
       digitalWrite(Solenoid9, HIGH); // vent -> 9
       digitalWrite(Solenoid10, LOW); // vac -> 10
       autoNext = true;
-      return 500;
+      return default_delay;
     break;
 
     case 14:
@@ -540,7 +541,7 @@ long solenoidActions(int stateNumber) {
     break;
 
     case 15:
-      // do action: Set all except 7 off, message
+      // do action: Set all except 7 off, message, delay 0.5s
       digitalWrite(Solenoid1, HIGH); // vent -> 1
       digitalWrite(Solenoid2, HIGH); // vent -> 2
       digitalWrite(Solenoid3, HIGH); // vent -> 3
