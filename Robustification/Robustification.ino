@@ -4,6 +4,8 @@
 #include "Wire.h" // for I2C
 #include "Adafruit_MPRLS.h" // pressure sensor
 
+double atmosphere = 14.63;
+
 // multiplexer setup
 #define TCAADDR 0x70 // define multiplexer I2C address
 // to select multiplexer output
@@ -317,7 +319,7 @@ long solenoidActions(int stateNumber) {
     break;
 
     case 2:
-      // do action: 8 on, delay 500 ms
+      // do action: 8 on, delay 3000 ms
       digitalWrite(Solenoid1, HIGH); // vent -> 1
       digitalWrite(Solenoid2, HIGH); // vent -> 2
       digitalWrite(Solenoid3, HIGH); // vent -> 3
@@ -329,7 +331,7 @@ long solenoidActions(int stateNumber) {
       digitalWrite(Solenoid9, HIGH); // vent -> 9
       digitalWrite(Solenoid10, HIGH); // vent -> 10
       autoNext = true;
-      return 500;
+      return 3000;
     break;
     
     case 3:
@@ -449,7 +451,7 @@ long solenoidActions(int stateNumber) {
     break;
 
     case 10:
-      // do action: Set 4 on, delay 10000
+      // do action: Set 4 on, message
       digitalWrite(Solenoid1, HIGH); // vac -> 1
       digitalWrite(Solenoid2, LOW); // vac -> 2
       digitalWrite(Solenoid3, HIGH); // vent -> 3
@@ -460,12 +462,13 @@ long solenoidActions(int stateNumber) {
       digitalWrite(Solenoid8, HIGH); // vent -> 8
       digitalWrite(Solenoid9, LOW); // vac -> 9
       digitalWrite(Solenoid10, HIGH); // vent -> 10
-      autoNext = true;
-      return 10000;
+      Serial.println("Confirm clear of buffer, press button to continue.");
+      autoNext = false
+      return default_delay;
     break;
 
     case 11:
-      // do action: Set 9 off, message
+      // do action: Set 9 off, delay 250
       digitalWrite(Solenoid1, HIGH); // vac -> 1
       digitalWrite(Solenoid2, LOW); // vac -> 2
       digitalWrite(Solenoid3, HIGH); // vent -> 3
@@ -476,9 +479,8 @@ long solenoidActions(int stateNumber) {
       digitalWrite(Solenoid8, HIGH); // vent -> 8
       digitalWrite(Solenoid9, HIGH); // vent -> 9
       digitalWrite(Solenoid10, HIGH); // vent -> 10
-      Serial.println("Confirm clear of buffer, press button to continue.");
-      autoNext = false;
-      return default_delay;
+      autoNext = true;
+      return 250;
     break;
 
     case 12:
@@ -687,6 +689,16 @@ void pressureRead() {
 
   tcaselect(7); // select multiplexer output
   pressure7 = mpr7.readPressure() / 68.947572932; // read pressure, convert to PSI
+
+  // convert absolute to relative pressure
+  pressure0 = atmosphere - pressure0;
+  pressure1 = atmosphere - pressure1;
+  pressure2 = atmosphere - pressure2;
+  pressure3 = atmosphere - pressure3;
+  pressure4 = atmosphere - pressure4;
+  pressure5 = atmosphere - pressure5;
+  pressure6 = atmosphere - pressure6;
+  pressure7 = atmosphere - pressure7;
   
   // print pressures to serial monitor/plotter
   Serial1.print(pressure0);
@@ -703,7 +715,15 @@ void pressureRead() {
   Serial1.print(",");
   Serial1.print(pressure6);
   Serial1.print(",");
-  Serial1.println(pressure7);
+  Serial1.print(pressure7);
+  Serial1.print(",");
+
+  // plot button pulse
+  if (digitalRead(buttonNext)) {
+    Serial1.println(1);    
+  } else {
+    Serial1.println(0);
+  }
 }
 
 // user input FSM
