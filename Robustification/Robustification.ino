@@ -400,8 +400,8 @@ long solenoidActions(int stateNumber) {
     break;
 
     case 7:
-      // do action: Set 3 off, 9 on, delay 250
-      digitalWrite(Solenoid1, LOW); // vac -> 1
+      // do action: Set 1 and 3 off, 9 on, delay 250
+      digitalWrite(Solenoid1, HIGH); // vac -> 1
       digitalWrite(Solenoid2, LOW); // vac -> 2
       digitalWrite(Solenoid3, HIGH); // vent -> 3
       digitalWrite(Solenoid4, HIGH); // vent -> 4
@@ -417,7 +417,7 @@ long solenoidActions(int stateNumber) {
 
     case 8:
       // do action: Set 6 on, delay 250
-      digitalWrite(Solenoid1, LOW); // vac -> 1
+      digitalWrite(Solenoid1, HIGH); // vac -> 1
       digitalWrite(Solenoid2, LOW); // vac -> 2
       digitalWrite(Solenoid3, HIGH); // vent -> 3
       digitalWrite(Solenoid4, HIGH); // vent -> 4
@@ -433,7 +433,7 @@ long solenoidActions(int stateNumber) {
 
     case 9:
       // do action: Set 5 off, message
-      digitalWrite(Solenoid1, LOW); // vac -> 1
+      digitalWrite(Solenoid1, HIGH); // vac -> 1
       digitalWrite(Solenoid2, LOW); // vac -> 2
       digitalWrite(Solenoid3, HIGH); // vent -> 3
       digitalWrite(Solenoid4, HIGH); // vent -> 4
@@ -450,7 +450,7 @@ long solenoidActions(int stateNumber) {
 
     case 10:
       // do action: Set 4 on, delay 10000
-      digitalWrite(Solenoid1, LOW); // vac -> 1
+      digitalWrite(Solenoid1, HIGH); // vac -> 1
       digitalWrite(Solenoid2, LOW); // vac -> 2
       digitalWrite(Solenoid3, HIGH); // vent -> 3
       digitalWrite(Solenoid4, LOW); // vac -> 4
@@ -466,7 +466,7 @@ long solenoidActions(int stateNumber) {
 
     case 11:
       // do action: Set 9 off, message
-      digitalWrite(Solenoid1, LOW); // vac -> 1
+      digitalWrite(Solenoid1, HIGH); // vac -> 1
       digitalWrite(Solenoid2, LOW); // vac -> 2
       digitalWrite(Solenoid3, HIGH); // vent -> 3
       digitalWrite(Solenoid4, LOW); // vac -> 4
@@ -483,12 +483,12 @@ long solenoidActions(int stateNumber) {
 
     case 12:
       // do action: Set 7 on, message
-      digitalWrite(Solenoid1, LOW); // vac -> 1
+      digitalWrite(Solenoid1, HIGH); // vac -> 1
       digitalWrite(Solenoid2, LOW); // vac -> 2
       digitalWrite(Solenoid3, HIGH); // vent -> 3
       digitalWrite(Solenoid4, LOW); // vac -> 4
       digitalWrite(Solenoid5, HIGH); // vent -> 5
-      digitalWrite(Solenoid6, LOW); // vac -> 6
+      digitalWrite(Solenoid6, HIGH); // vent -> 6
       digitalWrite(Solenoid7, LOW); // vac -> 7
       digitalWrite(Solenoid8, HIGH); // vent -> 8
       digitalWrite(Solenoid9, HIGH); // vent -> 9
@@ -500,12 +500,12 @@ long solenoidActions(int stateNumber) {
 
     case 13:
       // do action: Set 10 on, delay 500
-      digitalWrite(Solenoid1, LOW); // vac -> 1
+      digitalWrite(Solenoid1, HIGH); // vac -> 1
       digitalWrite(Solenoid2, LOW); // vac -> 2
       digitalWrite(Solenoid3, HIGH); // vent -> 3
       digitalWrite(Solenoid4, LOW); // vac -> 4
       digitalWrite(Solenoid5, HIGH); // vent -> 5
-      digitalWrite(Solenoid6, LOW); // vac -> 6
+      digitalWrite(Solenoid6, HIGH); // vac -> 6
       digitalWrite(Solenoid7, LOW); // vac -> 7
       digitalWrite(Solenoid8, HIGH); // vent -> 8
       digitalWrite(Solenoid9, HIGH); // vent -> 9
@@ -516,12 +516,12 @@ long solenoidActions(int stateNumber) {
 
     case 14:
       // do action: Set 3 on and 5 on, message
-      digitalWrite(Solenoid1, LOW); // vac -> 1
+      digitalWrite(Solenoid1, HIGH); // vac -> 1
       digitalWrite(Solenoid2, LOW); // vac -> 2
       digitalWrite(Solenoid3, LOW); // vac -> 3
       digitalWrite(Solenoid4, LOW); // vac -> 4
       digitalWrite(Solenoid5, LOW); // vac -> 5
-      digitalWrite(Solenoid6, LOW); // vac -> 6
+      digitalWrite(Solenoid6, LOW); // VENT -> 6
       digitalWrite(Solenoid7, LOW); // vac -> 7
       digitalWrite(Solenoid8, HIGH); // vent -> 8
       digitalWrite(Solenoid9, HIGH); // vent -> 9
