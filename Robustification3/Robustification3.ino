@@ -76,7 +76,7 @@ double pressure7;
 // state machine variables
 unsigned long currentMillis;
 unsigned long previousMillis = 0;
-#define numStates 18 // = number of states + 1
+#define numStates 17 // = number of states + 1
 bool autoNext = false; // auto advance to next step
 
 const unsigned long default_delay = 10;
@@ -425,25 +425,8 @@ long solenoidActions(int stateNumber) {
     break;
 
     case 7:
-      // do action: Set 1 off, delay 2s, go to next step
-      digitalWrite(Solenoid1, HIGH); // vent -> 1
-      digitalWrite(Solenoid2, HIGH); // vent -> 2
-      digitalWrite(Solenoid3, HIGH); // vent -> 3
-      digitalWrite(Solenoid4, HIGH); // vent -> 4
-      digitalWrite(Solenoid5, HIGH); // vent -> 5
-      digitalWrite(Solenoid6, HIGH); // vent -> 6
-      digitalWrite(Solenoid7, HIGH); // vent -> 7
-      digitalWrite(Solenoid8, LOW); // open -> 8
-      digitalWrite(Solenoid9, HIGH); // blocked -> 9
-      digitalWrite(Solenoid10, HIGH); // blocked -> 10
-      digitalWrite(Solenoid11, HIGH); // blocked -> 11
-      autoNext = true;
-      return 2000;
-    break;
-    
-    case 8:
       // do action: Set 3 on and 5 on, delay 0.5s, message
-      digitalWrite(Solenoid1, HIGH); // vent -> 1
+      digitalWrite(Solenoid1, LOW); // vac -> 1
       digitalWrite(Solenoid2, HIGH); // vent -> 2
       digitalWrite(Solenoid3, LOW); // vac -> 3
       digitalWrite(Solenoid4, HIGH); // vent -> 4
@@ -459,8 +442,8 @@ long solenoidActions(int stateNumber) {
       return default_delay;
     break;
 
-    case 9:
-      // do action: Set 3 off and 5 off and 9 on, delay 2s, go to next step
+    case 8:
+      // do action: Set 1 off and 3 off and 5 off and 9 on, delay 2s, go to next step
       digitalWrite(Solenoid1, HIGH); // vent -> 1
       digitalWrite(Solenoid2, HIGH); // vent -> 2
       digitalWrite(Solenoid3, HIGH); // vent -> 3
@@ -476,7 +459,7 @@ long solenoidActions(int stateNumber) {
       return 2000;
     break;
 
-    case 10:
+    case 9:
       // do action: Set 6 on, delay 0.5s, message
       digitalWrite(Solenoid1, HIGH); // vent -> 1
       digitalWrite(Solenoid2, HIGH); // vent -> 2
@@ -494,7 +477,7 @@ long solenoidActions(int stateNumber) {
       return default_delay;
     break;
 
-    case 11:
+    case 10:
       // do action: Set 4 on, delay 0.5s, message
       digitalWrite(Solenoid1, HIGH); // vent -> 1
       digitalWrite(Solenoid2, HIGH); // vent -> 2
@@ -512,7 +495,7 @@ long solenoidActions(int stateNumber) {
       return default_delay;
     break;
 
-    case 12:
+    case 11:
       // do action: Set 4 off, delay 2s, go to next step
       digitalWrite(Solenoid1, HIGH); // vent -> 1
       digitalWrite(Solenoid2, HIGH); // vent -> 2
@@ -529,7 +512,7 @@ long solenoidActions(int stateNumber) {
       return 2000;
     break;
 
-    case 13:
+    case 12:
       // do action: Set 7 on, delay 0.5s, message
       digitalWrite(Solenoid1, HIGH); // vent -> 1
       digitalWrite(Solenoid2, HIGH); // vent -> 2
@@ -547,7 +530,7 @@ long solenoidActions(int stateNumber) {
       return default_delay;
     break;
 
-    case 14:
+    case 13:
       // do action: Set 6 off, delay 0.5s, message
       digitalWrite(Solenoid1, HIGH); // vent -> 1
       digitalWrite(Solenoid2, HIGH); // vent -> 2
@@ -565,7 +548,7 @@ long solenoidActions(int stateNumber) {
       return default_delay;
     break;
 
-    case 15:
+    case 14:
       // do action: Set 10 on, delay 2s, go to next step
       digitalWrite(Solenoid1, HIGH); // vent -> 1
       digitalWrite(Solenoid2, HIGH); // vent -> 2
@@ -582,7 +565,7 @@ long solenoidActions(int stateNumber) {
       return 2000;
     break;
 
-    case 16:
+    case 15:
       // do action: Set 6 on and 5 on and 3 on, delay 0.5s, message
       digitalWrite(Solenoid1, HIGH); // vent -> 1
       digitalWrite(Solenoid2, HIGH); // vent -> 2
@@ -600,8 +583,8 @@ long solenoidActions(int stateNumber) {
       return default_delay;
     break;
 
-    case 17:
-      // do action: Set all except 7 off, message, delay 0.5s
+    case 16:
+      // do action: Set all except 7 and 10 off, message, delay 0.5s
       digitalWrite(Solenoid1, HIGH); // vent -> 1
       digitalWrite(Solenoid2, HIGH); // vent -> 2
       digitalWrite(Solenoid3, HIGH); // vent -> 3
@@ -611,7 +594,7 @@ long solenoidActions(int stateNumber) {
       digitalWrite(Solenoid7, LOW); // vac -> 7
       digitalWrite(Solenoid8, HIGH); // blocked -> 8
       digitalWrite(Solenoid9, HIGH); // blocked -> 9
-      digitalWrite(Solenoid10, HIGH); // blocked -> 10
+      digitalWrite(Solenoid10, LOW); // open -> 10
       digitalWrite(Solenoid11, HIGH); // blocked -> 11
       Serial.println("Workflow complete! Robustification achieved.");
       Serial.println("////////////////////////////////////////////");
