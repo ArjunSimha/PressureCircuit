@@ -1,4 +1,4 @@
-// ROBUST Pressure Actuated Microfluididc System (PAMS)
+// ROBUSTificated Pressure Actuated Microfluididc System (PAMS)
 
 // include libraries
 #include "Wire.h" // for I2C
@@ -76,7 +76,8 @@ double pressure7;
 // state machine variables
 unsigned long currentMillis;
 unsigned long previousMillis = 0;
-#define numStates 18 // = number of states + 1
+#define numStates 17 // = number of states + 1 FOR NORMAL
+//#define numStates 18 // = number of states + 1 FOR BUFFER STAGE
 bool autoNext = false; // auto advance to next step
 
 const unsigned long default_delay = 10;
@@ -181,7 +182,8 @@ void loop() {
         digitalWrite(readyLED, HIGH); // turn ready LED on
       }
       if (state || autoNext) {
-        period_ms = solenoidActions(stateCounter);
+        period_ms = solenoidActions(stateCounter); // FOR NORMAL
+        //period_ms = solenoidActions_BufferStage(stateCounter); // FOR BUFFER STAGE
         stateCounter++; // increment state
         promptAsked = false;
         previousMillis = currentMillis; // reset millis counter
@@ -282,7 +284,351 @@ void sensorInitialization() {
 }
 
 // automated solenoid control
+// normal cartridge
 long solenoidActions(int stateNumber) {
+  // intro line
+  Serial.println(); // blank line
+  Serial.println("/////////////////");
+  Serial.print("Beginning State #");
+  Serial.println(stateNumber);
+
+  // Implementation:
+  // LOW = solenoid on/vac
+  // HIGH = solenoid off/vent
+  // cases execute in order
+  // number after return statement is delay for that step
+
+  // NOTE: 11 is linked to 2
+  // vac = 11 LOW, 2 LOW
+  // close = 11 HIGH, 2 HIGH
+  // vent = 11 LOW, 2 HIGH
+
+  // NOTE: 8 is linked to 4
+  // vac = 8 LOW, 4 LOW
+  // close = 8 HIGH, 4 HIGH
+  // vent = 8 HIGH, 4 LOW
+
+  // digitalWrite(Solenoid1, HIGH/LOW); // vent/vac -> 1 (port 1)
+  // digitalWrite(Solenoid2, HIGH/LOW); // vent/vac -> 2 (port 2)
+  // digitalWrite(Solenoid3, HIGH/LOW); // vent/vac -> 3 (port 3)
+  // digitalWrite(Solenoid4, HIGH/LOW); // vent/vac -> 4 (port 4)
+  // digitalWrite(Solenoid5, HIGH/LOW); // vent/vac -> 5 (port 5)
+  // digitalWrite(Solenoid6, HIGH/LOW); // vent/vac -> 6 (port 6)
+  // digitalWrite(Solenoid7, HIGH/LOW); // vent/vac -> 7 (port 7)
+  // digitalWrite(Solenoid8, HIGH/LOW); // blocked/open -> 8 (port 4)
+  // digitalWrite(Solenoid9, HIGH/LOW); // blocked/open -> 9 (port 9)
+  // digitalWrite(Solenoid10, HIGH/LOW); // blocked/open -> 10 (port 10)
+  // digitalWrite(Solenoid11, HIGH/LOW); // blocked/open -> 11 (port 2)
+
+  switch (stateNumber) {
+    case 1:
+      // do action: turn all off, message, delay 0.5s
+      digitalWrite(Solenoid1, HIGH); // vent -> 1
+      digitalWrite(Solenoid2, HIGH); // vent -> 2
+      digitalWrite(Solenoid3, HIGH); // vent -> 3
+      digitalWrite(Solenoid4, HIGH); // vent -> 4
+      digitalWrite(Solenoid5, HIGH); // vent -> 5
+      digitalWrite(Solenoid6, HIGH); // vent -> 6
+      digitalWrite(Solenoid7, HIGH); // vent -> 7
+      digitalWrite(Solenoid8, HIGH); // blocked -> 8
+      digitalWrite(Solenoid9, HIGH); // blocked -> 9
+      digitalWrite(Solenoid10, HIGH); // blocked -> 10
+      digitalWrite(Solenoid11, HIGH); // blocked -> 11
+      Serial.println("Press button to begin.");
+      autoNext = true;
+      return default_delay;
+    break;
+
+    case 2:
+      // do action: 1 on, delay 0.5s, message
+      digitalWrite(Solenoid1, LOW); // vac -> 1
+      digitalWrite(Solenoid2, HIGH); // vent -> 2
+      digitalWrite(Solenoid3, HIGH); // vent -> 3
+      digitalWrite(Solenoid4, HIGH); // vent -> 4
+      digitalWrite(Solenoid5, HIGH); // vent -> 5
+      digitalWrite(Solenoid6, HIGH); // vent -> 6
+      digitalWrite(Solenoid7, HIGH); // vent -> 7
+      digitalWrite(Solenoid8, HIGH); // blocked -> 8
+      digitalWrite(Solenoid9, HIGH); // blocked -> 9
+      digitalWrite(Solenoid10, HIGH); // blocked -> 10
+      digitalWrite(Solenoid11, HIGH); // blocked -> 11
+      Serial.println("Check plasma fill, press button to open vent to help fill and continue.");
+      autoNext = false;
+      return default_delay;
+    break;
+
+    case 3:
+      // do action: Set 11 on, delay 0.5s, message
+      digitalWrite(Solenoid1, LOW); // vac -> 1
+      digitalWrite(Solenoid2, HIGH); // vent -> 2
+      digitalWrite(Solenoid3, HIGH); // vent -> 3
+      digitalWrite(Solenoid4, HIGH); // vent -> 4
+      digitalWrite(Solenoid5, HIGH); // vent -> 5
+      digitalWrite(Solenoid6, HIGH); // vent -> 6
+      digitalWrite(Solenoid7, HIGH); // vent -> 7
+      digitalWrite(Solenoid8, HIGH); // blocked -> 8
+      digitalWrite(Solenoid9, HIGH); // blocked -> 9
+      digitalWrite(Solenoid10, HIGH); // blocked -> 10
+      digitalWrite(Solenoid11, LOW); // open -> 11
+      Serial.println("Verify sample is full, press button to continue.");
+      autoNext = false;
+      return default_delay;
+    break;
+
+    case 4:
+      // do action: Set 8 on, delay 2s, go to next step
+      digitalWrite(Solenoid1, LOW); // vac -> 1
+      digitalWrite(Solenoid2, HIGH); // vent -> 2
+      digitalWrite(Solenoid3, HIGH); // vent -> 3
+      digitalWrite(Solenoid4, HIGH); // vent -> 4
+      digitalWrite(Solenoid5, HIGH); // vent -> 5
+      digitalWrite(Solenoid6, HIGH); // vent -> 6
+      digitalWrite(Solenoid7, HIGH); // vent -> 7
+      digitalWrite(Solenoid8, LOW); // open -> 8
+      digitalWrite(Solenoid9, HIGH); // blocked -> 9
+      digitalWrite(Solenoid10, HIGH); // blocked -> 10
+      digitalWrite(Solenoid11, LOW); // open -> 11
+      autoNext = true;
+      return 2000;
+    break;
+
+    case 5:
+      // do action: Set 2 on, delay 0.5s, message
+      digitalWrite(Solenoid1, LOW); // vac -> 1
+      digitalWrite(Solenoid2, LOW); // vac -> 2
+      digitalWrite(Solenoid3, HIGH); // vent -> 3
+      digitalWrite(Solenoid4, HIGH); // vent -> 4
+      digitalWrite(Solenoid5, HIGH); // vent -> 5
+      digitalWrite(Solenoid6, HIGH); // vent -> 6
+      digitalWrite(Solenoid7, HIGH); // vent -> 7
+     digitalWrite(Solenoid8, LOW); // open -> 8
+      digitalWrite(Solenoid9, HIGH); // blocked -> 9
+      digitalWrite(Solenoid10, HIGH); // blocked -> 10
+      digitalWrite(Solenoid11, LOW); // open -> 11
+      Serial.println("Verify sample is cleared, press button to continue.");
+      autoNext = false;
+      return default_delay;
+    break;
+
+    case 6:
+      // do action: Set 2 off and 11 off, delay 2s, go to next step
+      digitalWrite(Solenoid1, LOW); // vac -> 1
+      digitalWrite(Solenoid2, HIGH); // vent -> 2
+      digitalWrite(Solenoid3, HIGH); // vent -> 3
+      digitalWrite(Solenoid4, HIGH); // vent -> 4
+      digitalWrite(Solenoid5, HIGH); // vent -> 5
+      digitalWrite(Solenoid6, HIGH); // vent -> 6
+      digitalWrite(Solenoid7, HIGH); // vent -> 7
+      digitalWrite(Solenoid8, LOW); // open -> 8
+      digitalWrite(Solenoid9, HIGH); // blocked -> 9
+      digitalWrite(Solenoid10, HIGH); // blocked -> 10
+      digitalWrite(Solenoid11, HIGH); // open -> 11
+      autoNext = true;
+      return 2000;
+    break;
+
+    case 7:
+      // do action: Set 3 on and 5 on, delay 0.5s, message
+      digitalWrite(Solenoid1, LOW); // vac -> 1
+      digitalWrite(Solenoid2, HIGH); // vent -> 2
+      digitalWrite(Solenoid3, LOW); // vac -> 3
+      digitalWrite(Solenoid4, HIGH); // vent -> 4
+      digitalWrite(Solenoid5, LOW); // vac -> 5
+      digitalWrite(Solenoid6, HIGH); // vent -> 6
+      digitalWrite(Solenoid7, HIGH); // vent -> 7
+      digitalWrite(Solenoid8, LOW); // open -> 8
+      digitalWrite(Solenoid9, HIGH); // blocked -> 9
+      digitalWrite(Solenoid10, HIGH); // blocked -> 10
+      digitalWrite(Solenoid11, HIGH); // blocked -> 11
+      Serial.println("Wait for dial to fill, press button to continue.");
+      autoNext = false;
+      return default_delay;
+    break;
+
+    case 8:
+      // do action: Set 1 off and 3 off and 5 off and 9 on, delay 2s, go to next step
+      digitalWrite(Solenoid1, HIGH); // vent -> 1
+      digitalWrite(Solenoid2, HIGH); // vent -> 2
+      digitalWrite(Solenoid3, HIGH); // vent -> 3
+      digitalWrite(Solenoid4, HIGH); // vent -> 4
+      digitalWrite(Solenoid5, HIGH); // vent -> 5
+      digitalWrite(Solenoid6, HIGH); // vent -> 6
+      digitalWrite(Solenoid7, HIGH); // vent -> 7
+      digitalWrite(Solenoid8, LOW); // open -> 8
+      digitalWrite(Solenoid9, LOW); // open -> 9
+      digitalWrite(Solenoid10, HIGH); // blocked -> 10
+      digitalWrite(Solenoid11, HIGH); // blocked -> 11
+      autoNext = true;
+      return 2000;
+    break;
+
+    case 9:
+      // do action: Set 6 on, delay 0.5s, message
+      digitalWrite(Solenoid1, HIGH); // vent -> 1
+      digitalWrite(Solenoid2, HIGH); // vent -> 2
+      digitalWrite(Solenoid3, HIGH); // vent -> 3
+      digitalWrite(Solenoid4, HIGH); // vent -> 4
+      digitalWrite(Solenoid5, HIGH); // vent -> 5
+      digitalWrite(Solenoid6, LOW); // vac -> 6
+      digitalWrite(Solenoid7, HIGH); // vent -> 7
+      digitalWrite(Solenoid8, LOW); // open -> 8
+      digitalWrite(Solenoid9, LOW); // open -> 9
+      digitalWrite(Solenoid10, HIGH); // blocked -> 10
+      digitalWrite(Solenoid11, HIGH); // blocked -> 11
+      Serial.println("Press buton to continue when dial is empty.");
+      autoNext = false;
+      return default_delay;
+    break;
+
+    case 10:
+      // do action: Set 4 on, delay 0.5s, message
+      digitalWrite(Solenoid1, HIGH); // vent -> 1
+      digitalWrite(Solenoid2, HIGH); // vent -> 2
+      digitalWrite(Solenoid3, HIGH); // vent -> 3
+      digitalWrite(Solenoid4, LOW); // vac -> 4
+      digitalWrite(Solenoid5, HIGH); // vent -> 5
+      digitalWrite(Solenoid6, LOW); // vac -> 6
+      digitalWrite(Solenoid7, HIGH); // vent -> 7
+      digitalWrite(Solenoid8, LOW); // open -> 8
+      digitalWrite(Solenoid9, LOW); // open -> 9
+      digitalWrite(Solenoid10, HIGH); // blocked -> 10
+      digitalWrite(Solenoid11, HIGH); // blocked -> 11
+      Serial.println("Verify buffer is clear, press button to continue.");
+      autoNext = false;
+      return default_delay;
+    break;
+
+    case 11:
+      // do action: Set 4 off, delay 2s, go to next step
+      digitalWrite(Solenoid1, HIGH); // vent -> 1
+      digitalWrite(Solenoid2, HIGH); // vent -> 2
+      digitalWrite(Solenoid3, HIGH); // vent -> 3
+      digitalWrite(Solenoid4, HIGH); // vent -> 4
+      digitalWrite(Solenoid5, HIGH); // vent -> 5
+      digitalWrite(Solenoid6, LOW); // vac -> 6
+      digitalWrite(Solenoid7, HIGH); // vent -> 7
+      digitalWrite(Solenoid8, LOW); // open -> 8
+      digitalWrite(Solenoid9, LOW); // open -> 9
+      digitalWrite(Solenoid10, HIGH); // blocked -> 10
+      digitalWrite(Solenoid11, HIGH); // blocked -> 11
+      autoNext = true;
+      return 2000;
+    break;
+
+    case 12:
+      // do action: Set 7 on, delay 0.5s, message
+      digitalWrite(Solenoid1, HIGH); // vent -> 1
+      digitalWrite(Solenoid2, HIGH); // vent -> 2
+      digitalWrite(Solenoid3, HIGH); // vent -> 3
+      digitalWrite(Solenoid4, HIGH); // vent -> 4
+      digitalWrite(Solenoid5, HIGH); // vent -> 5
+      digitalWrite(Solenoid6, LOW); // vac -> 6
+      digitalWrite(Solenoid7, LOW); // vac -> 7
+      digitalWrite(Solenoid8, LOW); // open -> 8
+      digitalWrite(Solenoid9, LOW); // open -> 9
+      digitalWrite(Solenoid10, HIGH); // blocked -> 10
+      digitalWrite(Solenoid11, HIGH); // blocked -> 11
+      Serial.println("Press button when detection wells are filled.");
+      autoNext = false;
+      return default_delay;
+    break;
+
+    case 13:
+      // do action: Set 6 off, delay 0.5s, message
+      digitalWrite(Solenoid1, HIGH); // vent -> 1
+      digitalWrite(Solenoid2, HIGH); // vent -> 2
+      digitalWrite(Solenoid3, HIGH); // vent -> 3
+      digitalWrite(Solenoid4, HIGH); // vent -> 4
+      digitalWrite(Solenoid5, HIGH); // vent -> 5
+      digitalWrite(Solenoid6, HIGH); // vent -> 6
+      digitalWrite(Solenoid7, LOW); // vac -> 7
+      digitalWrite(Solenoid8, LOW); // open -> 8
+      digitalWrite(Solenoid9, LOW); // open -> 9
+      digitalWrite(Solenoid10, HIGH); // blocked -> 10
+      digitalWrite(Solenoid11, HIGH); // blocked -> 11
+      Serial.println("Press button when detection wells are filled.");
+      autoNext = false;
+      return default_delay;
+    break;
+
+    case 14:
+      // do action: Set 10 on, delay 2s, go to next step
+      digitalWrite(Solenoid1, HIGH); // vent -> 1
+      digitalWrite(Solenoid2, HIGH); // vent -> 2
+      digitalWrite(Solenoid3, HIGH); // vent -> 3
+      digitalWrite(Solenoid4, HIGH); // vent -> 4
+      digitalWrite(Solenoid5, HIGH); // vent -> 5
+      digitalWrite(Solenoid6, HIGH); // vent -> 6
+      digitalWrite(Solenoid7, LOW); // vac -> 7
+      digitalWrite(Solenoid8, LOW); // open -> 8
+      digitalWrite(Solenoid9, LOW); // open -> 9
+      digitalWrite(Solenoid10, LOW); // open -> 10
+      digitalWrite(Solenoid11, HIGH); // blocked -> 11
+      autoNext = true;
+      return 2000;
+    break;
+
+    case 15:
+      // do action: Set 6 on and 5 on and 3 on, delay 0.5s, message
+      digitalWrite(Solenoid1, HIGH); // vent -> 1
+      digitalWrite(Solenoid2, HIGH); // vent -> 2
+      digitalWrite(Solenoid3, LOW); // vac -> 3
+      digitalWrite(Solenoid4, HIGH); // vent -> 4
+      digitalWrite(Solenoid5, LOW); // vac -> 5
+      digitalWrite(Solenoid6, LOW); // vac -> 6
+      digitalWrite(Solenoid7, LOW); // vac -> 7
+      digitalWrite(Solenoid8, LOW); // open -> 8
+      digitalWrite(Solenoid9, LOW); // open -> 9
+      digitalWrite(Solenoid10, LOW); // open -> 10
+      digitalWrite(Solenoid11, HIGH); // blocked -> 11
+      Serial.println("Press button to confirm detection clear.");
+      autoNext = false;
+      return default_delay;
+    break;
+
+    case 16:
+      // do action: Set all except 7 and 10 off, message, delay 0.5s
+      digitalWrite(Solenoid1, HIGH); // vent -> 1
+      digitalWrite(Solenoid2, HIGH); // vent -> 2
+      digitalWrite(Solenoid3, HIGH); // vent -> 3
+      digitalWrite(Solenoid4, HIGH); // vent -> 4
+      digitalWrite(Solenoid5, HIGH); // vent -> 5
+      digitalWrite(Solenoid6, HIGH); // vent -> 6
+      digitalWrite(Solenoid7, LOW); // vac -> 7
+      digitalWrite(Solenoid8, HIGH); // blocked -> 8
+      digitalWrite(Solenoid9, HIGH); // blocked -> 9
+      digitalWrite(Solenoid10, LOW); // open -> 10
+      digitalWrite(Solenoid11, HIGH); // blocked -> 11
+      Serial.println("Workflow complete! Robustification achieved.");
+      Serial.println("////////////////////////////////////////////");
+      Serial.println();      
+      autoNext = false;
+      return default_delay;
+    break;
+
+    default:
+      // by default, do action: turn all off
+      digitalWrite(Solenoid1, HIGH); // vent -> 1
+      digitalWrite(Solenoid2, HIGH); // vent -> 2
+      digitalWrite(Solenoid3, HIGH); // vent -> 3
+      digitalWrite(Solenoid4, HIGH); // vent -> 4
+      digitalWrite(Solenoid5, HIGH); // vent -> 5
+      digitalWrite(Solenoid6, HIGH); // vent -> 6
+      digitalWrite(Solenoid7, HIGH); // vent -> 7
+      digitalWrite(Solenoid8, HIGH); // vent -> 8
+      digitalWrite(Solenoid8, HIGH); // blocked -> 8
+      digitalWrite(Solenoid9, HIGH); // blocked -> 9
+      digitalWrite(Solenoid10, HIGH); // blocked -> 10
+      digitalWrite(Solenoid11, HIGH); // blocked -> 11
+      autoNext = false;
+      return default_delay;
+    break;
+  }
+}
+
+// automated solenoid control
+// Buffer stage cartridge
+long solenoidActions_BufferStage(int stateNumber) {
   // intro line
   Serial.println(); // blank line
   Serial.println("/////////////////");
