@@ -1,4 +1,4 @@
-// ROBUST Pressure Actuated Microfluididc System (PAMS)
+// ROBUSTificated Pressure Actuated Microfluididc System (PAMS)
 
 // include libraries
 #include "Wire.h" // for I2C
