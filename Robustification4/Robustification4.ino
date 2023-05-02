@@ -36,7 +36,7 @@ void tcaselect(uint8_t i) {
 #define SW2 41
 #define SW3 39
 #define SW4 37
-#define SW5 33
+#define SW5 35
 #define SW6 31
 #define SW7 29
 #define SW8 27
@@ -44,7 +44,7 @@ void tcaselect(uint8_t i) {
 #define SW10 23
 #define SW11 45
 #define SW12 47
-#define SWAuto 35 // to switch between manual and automated code
+#define SWAuto 33 // to switch between manual and automated code
 #define buttonNext 53 // to advance to next step
 #define readyLED 7 // to indicate if ready to advance to next step
 
@@ -132,7 +132,6 @@ void setup() {
 
   // initialize ready LED
   pinMode(readyLED, OUTPUT);
-  digitalWrite(readyLED, LOW);
 
   // initialize Switch pins
   pinMode(SW1, INPUT);
@@ -193,6 +192,7 @@ void loop() {
     }
   } else { // manual code
     solenoidManual(); // update solenoids according to switches
+    digitalWrite(readyLED, LOW); // turn ready LED off
     stateCounter = 1;
   }
 
@@ -1066,13 +1066,12 @@ void solenoidManual() {
     digitalWrite(Solenoid11, LOW);
   }
 
-  // Spare channel
-  // if (digitalRead(SW12)) {
-  //   digitalWrite(Solenoid12, HIGH);
-  //   // Serial.println("Solenoid 12 on");
-  // } else {
-  //   digitalWrite(Solenoid12, LOW);
-  // }
+  if (digitalRead(SW12)) {
+    digitalWrite(Solenoid12, HIGH);
+    // Serial.println("Solenoid 12 on");
+  } else {
+    digitalWrite(Solenoid12, LOW);
+  }
 }
 
 // turn pump fully on or fully off in order to keep it between two setpoints
