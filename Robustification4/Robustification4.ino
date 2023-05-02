@@ -124,7 +124,7 @@ void setup() {
   pinMode(Solenoid9, OUTPUT);
   pinMode(Solenoid10, OUTPUT);
   pinMode(Solenoid11, OUTPUT);
-  pinMode(Solenoid12, OUTPUT); // unused relay
+  pinMode(Solenoid12, OUTPUT);
   pinMode(50, OUTPUT); // unused relay
   pinMode(52, OUTPUT); // unused relay
   pinMode(34, OUTPUT); // unused relay
@@ -161,7 +161,7 @@ void setup() {
   digitalWrite(Solenoid9, HIGH);
   digitalWrite(Solenoid10, HIGH);
   digitalWrite(Solenoid11, HIGH);
-  digitalWrite(Solenoid12, HIGH); // spare channel
+  digitalWrite(Solenoid12, HIGH);
   digitalWrite(50, HIGH); // unused relay
   digitalWrite(52, HIGH); // unused relay
   digitalWrite(34, HIGH); // unused relay
@@ -316,9 +316,10 @@ long solenoidActions(int stateNumber) {
   // digitalWrite(Solenoid6, HIGH/LOW); // vent/vac -> 6 (port 6)
   // digitalWrite(Solenoid7, HIGH/LOW); // vent/vac -> 7 (port 7)
   // digitalWrite(Solenoid8, HIGH/LOW); // blocked/open -> 8 (port 4)
-  // digitalWrite(Solenoid9, HIGH/LOW); // blocked/open -> 9 (port 9)
-  // digitalWrite(Solenoid10, HIGH/LOW); // blocked/open -> 10 (port 10)
+  // digitalWrite(Solenoid9, HIGH/LOW); // blocked/open -> 9 (port 8)
+  // digitalWrite(Solenoid10, HIGH/LOW); // blocked/open -> 10 (port 9)
   // digitalWrite(Solenoid11, HIGH/LOW); // blocked/open -> 11 (port 2)
+  // digitalWrite(Solenoid12, HIGH/LOW); // blocked/open -> 12 (port 10)
 
   switch (stateNumber) {
     case 1:
@@ -659,9 +660,10 @@ long solenoidActions_BufferStage(int stateNumber) {
   // digitalWrite(Solenoid6, HIGH/LOW); // vent/vac -> 6 (port 6)
   // digitalWrite(Solenoid7, HIGH/LOW); // vent/vac -> 7 (port 7)
   // digitalWrite(Solenoid8, HIGH/LOW); // blocked/open -> 8 (port 4)
-  // digitalWrite(Solenoid9, HIGH/LOW); // blocked/open -> 9 (port 9)
-  // digitalWrite(Solenoid10, HIGH/LOW); // blocked/open -> 10 (port 10)
+  // digitalWrite(Solenoid9, HIGH/LOW); // blocked/open -> 9 (port 8)
+  // digitalWrite(Solenoid10, HIGH/LOW); // blocked/open -> 10 (port 9)
   // digitalWrite(Solenoid11, HIGH/LOW); // blocked/open -> 11 (port 2)
+  // digitalWrite(Solenoid12, HIGH/LOW); // blocked/open -> 12 (port 10)
 
   switch (stateNumber) {
     case 1:
