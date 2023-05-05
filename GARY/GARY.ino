@@ -575,9 +575,9 @@ long solenoidActions(int stateNumber) {
     break;
 
     case 3:
-      // do action: vac port 1, delay 0.5s, message
+      // do action: vac port 1, vent port 2, delay 0.5s, message
       portControl(1, 2); // vac
-      portControl(2, 1); // blocked
+      portControl(2, 2); // vent
       portControl(3, 1); // vent
       portControl(4, 1); // blocked
       portControl(5, 1); // vent
@@ -609,9 +609,9 @@ long solenoidActions(int stateNumber) {
     break;
 
     case 5:
-      // do action: block port 8, vent port 4, block port 2, delay 0.5s, message
+      // do action: block port 8, vent port 4, delay 0.5s, message
       portControl(1, 2); // vac
-      portControl(2, 1); // blocked
+      portControl(2, 3); // vac
       portControl(3, 1); // vent
       portControl(4, 2); // vent
       portControl(5, 1); // vent
@@ -628,7 +628,7 @@ long solenoidActions(int stateNumber) {
     case 6:
       // do action: vac port 3, delay 0.25s, go to next step
       portControl(1, 2); // vac
-      portControl(2, 1); // blocked
+      portControl(2, 3); // vac
       portControl(3, 2); // vac
       portControl(4, 2); // vent
       portControl(5, 1); // vent
@@ -644,7 +644,7 @@ long solenoidActions(int stateNumber) {
     case 7:
       // do action: vac port 5, delay 0.5s, message
       portControl(1, 2); // vac
-      portControl(2, 1); // blocked
+      portControl(2, 3); // vac
       portControl(3, 2); // vac
       portControl(4, 2); // vent
       portControl(5, 2); // vac
@@ -661,7 +661,7 @@ long solenoidActions(int stateNumber) {
     case 8:
       // do action: vent port 10, block port 9, delay 0.5s, message
       portControl(1, 2); // vac
-      portControl(2, 1); // blocked
+      portControl(2, 3); // vac
       portControl(3, 2); // vac
       portControl(4, 2); // vent
       portControl(5, 2); // vac
@@ -678,7 +678,7 @@ long solenoidActions(int stateNumber) {
     case 9:
       // do action: vent port 3 and 5, delay 0.5s, message
       portControl(1, 2); // vac
-      portControl(2, 1); // blocked
+      portControl(2, 3); // vac
       portControl(3, 1); // vent
       portControl(4, 2); // vent
       portControl(5, 1); // vent
@@ -695,7 +695,7 @@ long solenoidActions(int stateNumber) {
     case 10:
       // do action: vac port 6, delay 0.5s, message
       portControl(1, 2); // vac
-      portControl(2, 1); // blocked
+      portControl(2, 3); // vac
       portControl(3, 1); // vent
       portControl(4, 2); // vent
       portControl(5, 1); // vent
@@ -712,7 +712,7 @@ long solenoidActions(int stateNumber) {
     case 11:
       // do action: vent port 1, delay 0.5s, go to next step
       portControl(1, 1); // vent
-      portControl(2, 1); // blocked
+      portControl(2, 3); // vac
       portControl(3, 1); // vent
       portControl(4, 2); // vent
       portControl(5, 1); // vent
@@ -728,7 +728,7 @@ long solenoidActions(int stateNumber) {
     case 12:
       // do action: vac port 4, delay 0.5s, message
       portControl(1, 1); // vent
-      portControl(2, 1); // blocked
+      portControl(2, 3); // vac
       portControl(3, 1); // vent
       portControl(4, 3); // vac
       portControl(5, 1); // vent
@@ -745,7 +745,7 @@ long solenoidActions(int stateNumber) {
     case 13:
       // do action: vac port 7, delay 0.5s, message
       portControl(1, 1); // vent
-      portControl(2, 1); // blocked
+      portControl(2, 3); // vac
       portControl(3, 1); // vent
       portControl(4, 3); // vac
       portControl(5, 1); // vent
@@ -762,7 +762,7 @@ long solenoidActions(int stateNumber) {
     case 14:
       // do action: vent port 6, delay 0.5s, message
       portControl(1, 1); // vent
-      portControl(2, 1); // blocked
+      portControl(2, 3); // vac
       portControl(3, 1); // vent
       portControl(4, 3); // vac
       portControl(5, 1); // vent
@@ -779,7 +779,7 @@ long solenoidActions(int stateNumber) {
     case 15:
       // do action: block port 10, delay 0.5s, message
       portControl(1, 1); // vent
-      portControl(2, 1); // blocked
+      portControl(2, 3); // vac
       portControl(3, 1); // vent
       portControl(4, 3); // vac
       portControl(5, 1); // vent
@@ -796,7 +796,7 @@ long solenoidActions(int stateNumber) {
     case 16:
       // do action: vent port 10, delay 0.5s, message
       portControl(1, 1); // vent
-      portControl(2, 1); // blocked
+      portControl(2, 3); // vac
       portControl(3, 1); // vent
       portControl(4, 3); // vac
       portControl(5, 1); // vent
@@ -813,7 +813,7 @@ long solenoidActions(int stateNumber) {
     case 17:
       // do action: vac port 6, delay 0.5s, message
       portControl(1, 1); // vent
-      portControl(2, 1); // blocked
+      portControl(2, 3); // vac
       portControl(3, 1); // vent
       portControl(4, 3); // vac
       portControl(5, 1); // vent
